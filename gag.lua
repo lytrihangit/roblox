@@ -18,6 +18,8 @@ local Leaderstats = LocalPlayer:WaitForChild("leaderstats")
 local Sheckles = Leaderstats:WaitForChild("Sheckles")
 local fileName = LocalPlayer.Name .. ".json"
 
+local dataService = require(ReplicatedStorage.Modules:WaitForChild("DataService"))
+
 local listEggs = {"Bug Egg", "Paradise Egg", "Mythical Egg", "Bee Egg"}
 local listPet = {"Red Fox", "Dragonfly", "Queen Bee", "Mimic Octopus"}
 
@@ -50,28 +52,6 @@ local function sellInventory()
             return true
         end
 	end
-end
-
-local function sendWH(title, description)
-	local embed = {
-		title = title,
-		description = description,
-		color = 0x00ff99
-	}
-
-	local payload = {
-		embeds = {embed}
-	}
-
-	local RequestData = {
-		Url = config.webhookUrl,
-		Method = "POST",
-		Headers = {
-			["Content-Type"] = "application/json"
-		},
-		Body = HttpService:JSONEncode(payload)
-	}
-	task.spawn(request, RequestData)
 end
 
 local function getEggs()
@@ -110,6 +90,7 @@ local function getRandomFarmPoint(locations)
 	local pivot, size = plot:GetPivot(), plot.Size
 	local x = math.random(math.ceil(pivot.X - size.X / 2), math.floor(pivot.X + size.X / 2))
 	local z = math.random(math.ceil(pivot.Z - size.Z / 2), math.floor(pivot.Z + size.Z / 2))
+
 	return Vector3.new(x, 4, z)
 end
 
@@ -133,46 +114,11 @@ local function isInList(target, list)
 	return false
 end
 
-local function buyEggs()
-    while wait(10) do
-        writeData("", "Wait Stock")
-
-        local stock = getStock()
-
-        for _, eggName in ipairs(stock) do
-            if isInList(eggName, listEggs) then
-
-                writeData("", "Buying : " .. eggName)
-
-                for i = 1, 3 do 
-                    BuyPetEgg:FireServer(i)
-                end
-
-                return true
-            end
-        end
-    end
-end
-
 local function getEggFarms()
     local farm = getFarm()
     local objects = farm.Important.Objects_Physical:GetChildren()
 
     return farm, objects
-end
-
-local function sendDiscord()
-    for _, tool in ipairs(Backpack:GetChildren()) do
-		local name = tool.Name
-		local petName = name:match("^(.-) %[%d+%.?%d* KG%]")
-		if petName then
-			if isInList(petName, listPet) then
-			    sendWH(LocalPlayer.Name, petName)
-	
-			    task.wait(0.5)
-			end
-        	end
-	end
 end
 
 local function hatchPets()
@@ -207,18 +153,82 @@ local function hatchPets()
     end
 end
 
+local function buyEggs()
+    while wait(15) do
+        writeData("", "Wait Stock")
+
+        hatchPets()
+
+        local stock = getStock()
+
+        for _, eggName in ipairs(stock) do
+            if isInList(eggName, listEggs) then
+
+                writeData("", "Buying : " .. eggName)
+
+                for i = 1, 3 do 
+                    BuyPetEgg:FireServer(i)
+                end
+
+                return true
+            end
+        end
+    end
+end
+
+local function petInventory()
+    local petList = {}
+    local data = dataService:GetData()
+
+    for _, v in pairs(data.PetsData.PetInventory.Data) do
+        local name = v.PetType
+        petList[name] = (petList[name] or 0) + 1
+    end
+
+    return petList
+end
+
+local function sendDiscord()
+    local petInv = petInventory()
+    local lines = {}
+    for pName, pCount in pairs(petInv) do
+        if isInList(pName, listPet) then
+            table.insert(lines, string.format("```%s x%d```", pName, pCount))
+        end
+    end
+
+    if #lines > 0 then
+        local description = string.format(
+            "**Username : %s**\n**List Pet :**%s",
+            LocalPlayer.Name,
+            table.concat(lines, "")
+        )
+        local embed = {
+            title = "Grow A Graden",
+            description = description,
+            color = 0x00ff99
+        }
+        local payload = {
+            embeds = {embed}
+        }
+        local RequestData = {
+            Url = config.webhookUrl,
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json"
+            },
+            Body = HttpService:JSONEncode(payload)
+        }
+        task.spawn(request, RequestData)
+    end
+end
+
 task.spawn(function ()
     local success, err = pcall(function ()
         sellInventory()
         task.wait(0.5)
 				
-        hatchPets()
-        task.wait(0.5)
-
         buyEggs()
-        task.wait(0.5)
-
-	hatchPets()
         task.wait(0.5)
 
         sendDiscord()
