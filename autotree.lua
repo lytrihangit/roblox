@@ -130,6 +130,11 @@ task.spawn(function ()
     task.wait(1)
 end)
 
+LocalPlayer.Idled:Connect(function()
+	VirtualUser:CaptureController()
+	VirtualUser:ClickButton2(Vector2.new())
+end)
+
 if LocalPlayer.Name == config.mainAccount then
     task.spawn(function ()
         while task.wait(1) do
