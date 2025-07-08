@@ -1,6 +1,5 @@
 repeat wait() until game:IsLoaded()
 
-local config = _G.config
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
