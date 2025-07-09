@@ -11,6 +11,7 @@ local LocalPlayer = Players.LocalPlayer
 local Backpack = LocalPlayer:WaitForChild("Backpack")
 local Leaderstats = LocalPlayer:WaitForChild("leaderstats")
 local Sheckles = Leaderstats:WaitForChild("Sheckles")
+local VirtualUser = game:GetService('VirtualUser')
 
 local GameEvents = ReplicatedStorage:WaitForChild("GameEvents")
 local Sell_Inventory = GameEvents:WaitForChild("Sell_Inventory")
@@ -165,9 +166,9 @@ if LocalPlayer.Name == config.mainAccount then
 							local prompt = char.HumanoidRootPart:FindFirstChildWhichIsA("ProximityPrompt", true)
 							if prompt then
                                 task.spawn(function ()
-                                    prompt:InputHoldBegin()
+                                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.E, false, game)
                                     task.wait(6)
-                                    prompt:InputHoldEnd()
+                                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
                                 end)
 
                                 task.wait(3)
