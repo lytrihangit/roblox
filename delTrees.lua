@@ -58,16 +58,20 @@ local function delTrees()
         end
     end
 
-    if #objects < 1 then
-        writeData("Completed", "Trees : " .. #objects)
-        return true
-    end
+    return true
 end
 
 task.spawn(function () 
     local success, err = pcall(function () 
         writeData("", "Deleting...")
+
+        task.wait(0.5)
+
         delTrees()
+
+        task.wait(0.5)
+
+        writeData("Completed", "Deleted!")
     end)
 
     if not success then
