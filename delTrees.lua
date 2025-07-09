@@ -1,6 +1,9 @@
 local HttpService = game:GetService("HttpService")
 local plants = workspace.Farm.Farm.Important.Plants_Physical
 local LocalPlayer = game:GetService("Players").LocalPlayer
+local Backpack = LocalPlayer:WaitForChild("Backpack")
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+
 local fileName = LocalPlayer.Name .. ".json"
 
 local function writeData(request, text)
@@ -21,7 +24,23 @@ local function getFarm()
 	end
 end
 
+local function equidShovel()
+    for _, tool in ipairs(Backpack:GetChildren()) do
+		local name = tool.Name
+		if name:find("Shovel") then
+            tool.Parent = Character
+            
+            return true
+		end
+	end
+    return false
+end
+
 local function delTrees()
+    if not equidShovel() then
+        equidShovel()
+    end
+    
     local farm = getFarm()
     local objects = farm.Important.Plants_Physical:GetChildren()
 
