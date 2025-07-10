@@ -144,7 +144,7 @@ local function hatchPets()
 
                 task.wait(0.5)
 
-                for _ = 1, 3 do
+                for _ = 1, 10 do
                     PetEggService:FireServer("CreateEgg", getRandomFarmPoint(locations))
                 end
             end
