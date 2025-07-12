@@ -186,12 +186,11 @@ local function claimMachine()
                 end
             end
         end
-        task.wait(60)
     end)
 end
 
 local function main()
-    while wait(15) do
+    while true do
         writeData("", "Wait Stock")
 
         hatchPets()
@@ -210,6 +209,7 @@ local function main()
                 return true
             end
         end
+        task.wait(15)
     end
 end
 
