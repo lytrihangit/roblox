@@ -83,7 +83,7 @@ local function isEquidPet()
 end
 
 local function equidPet()
-    if isEquidPet() then return true
+    if isEquidPet() then return true end
 
     local pets = {}
     for _, p in ipairs(Backpack:GetChildren()) do
@@ -112,7 +112,6 @@ local function countPet()
             end
         end
     end
-
     return #pets
 end
 
@@ -200,6 +199,7 @@ else
             end)
             if not success then
                 print("err : ", err)
+                writeData("", err)
             end
             task.wait(3)
         end
