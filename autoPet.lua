@@ -23,6 +23,18 @@ local function writeData(request, text)
 	writefile(fileName, HttpService:JSONEncode({ Request = request, Text = text }))
 end
 
+local function skipGame()
+	local viewportSize = workspace.CurrentCamera.ViewportSize
+	local x = viewportSize.X / 2
+	local y = viewportSize.Y / 2
+	for i = 1, 2 do
+		VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, game, 0)
+		task.wait(0.1)
+		VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, game, 0)
+		task.wait(0.5)
+	end
+end
+
 local function isMain(name)
     for _, v in ipairs(config.mainAccount) do
         if v == name then
@@ -118,6 +130,12 @@ local function acceptGift()
         AcceptPetGift:FireServer(true, p)
     end)
 end
+
+task.spawn(function ()
+    task.wait(1)
+    skipGame()
+    task.wait(1)
+end)
 
 if isMain(LocalPlayer.Name) then
     task.spawn(function ()
