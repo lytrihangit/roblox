@@ -27,12 +27,10 @@ local function skipGame()
 	local viewportSize = workspace.CurrentCamera.ViewportSize
 	local x = viewportSize.X / 2
 	local y = viewportSize.Y / 2
-	for i = 1, 2 do
-		VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, game, 0)
-		task.wait(0.1)
-		VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, game, 0)
-		task.wait(0.5)
-	end
+	VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, game, 0)
+	task.wait(0.1)
+	VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, game, 0)
+	task.wait(0.5)
 end
 
 local function isMain(name)
@@ -129,12 +127,6 @@ local function acceptGift()
         AcceptPetGift:FireServer(true, p)
     end)
 end
-
-task.spawn(function ()
-    task.wait(1)
-    skipGame()
-    task.wait(1)
-end)
 
 if isMain(LocalPlayer.Name) then
     task.spawn(function ()
