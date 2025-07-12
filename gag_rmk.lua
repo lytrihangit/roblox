@@ -12,8 +12,6 @@ local DinoMachineService = GameEvents:WaitForChild("DinoMachineService_RE")
 
 local DataStream = GameEvents:WaitForChild("DataStream")
 
-local EggLocations = workspace:WaitForChild("NPCS"):WaitForChild("Pet Stand"):WaitForChild("EggLocations")
-
 local LocalPlayer = Players.LocalPlayer
 local Backpack = LocalPlayer:WaitForChild("Backpack")
 local Leaderstats = LocalPlayer:WaitForChild("leaderstats")
