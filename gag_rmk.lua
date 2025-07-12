@@ -97,13 +97,14 @@ local function getRandomFarmPoint(locations)
 end
 
 local function getStock()
-    local eggLines = {}
-	for _, egg in ipairs(EggLocations:GetChildren()) do
-		if egg:IsA("Model") then
-            table.insert(eggLines, egg.Name)
-		end
-	end
-    return eggLines
+    local eggStock = {}
+    local data = dataService:GetData()
+
+    for _, v in pairs(data.PetEggStock.Stocks) do
+        table.insert(eggStock, v.EggName)
+    end
+
+    return eggStock
 end
 
 local function isInList(target, list)
@@ -144,7 +145,7 @@ local function hatchPets()
 
                 task.wait(0.5)
 
-                for _ = 1, 10 do
+                for _ = 1, 8 do
                     PetEggService:FireServer("CreateEgg", getRandomFarmPoint(locations))
                 end
             end
@@ -204,9 +205,7 @@ local function main()
 
                 writeData("", "Buying : " .. eggName)
 
-                for i = 1, 3 do 
-                    BuyPetEgg:FireServer(i)
-                end
+                BuyPetEgg:FireServer(eggName)
 
                 return true
             end
