@@ -12,6 +12,9 @@ local Backpack = LocalPlayer:WaitForChild("Backpack")
 
 local GiftPet = ReplicatedStorage:FindFirstChild("GameEvents"):FindFirstChild("GiftPet")
 local AcceptPetGift = ReplicatedStorage:FindFirstChild("GameEvents"):FindFirstChild("AcceptPetGift")
+local PetsService = ReplicatedStorage:FindFirstChild("GameEvents"):WaitForChild("PetsService")
+
+local dataService = require(ReplicatedStorage.Modules:WaitForChild("DataService"))
 
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 
@@ -27,10 +30,12 @@ local function skipGame()
 	local viewportSize = workspace.CurrentCamera.ViewportSize
 	local x = viewportSize.X / 2
 	local y = viewportSize.Y / 2
-	VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, game, 0)
-	task.wait(0.1)
-	VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, game, 0)
-	task.wait(0.5)
+	for i = 1, 2 do
+		VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, game, 0)
+		task.wait(0.1)
+		VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, game, 0)
+		task.wait(0.5)
+	end
 end
 
 local function isMain(name)
@@ -47,6 +52,14 @@ local function isInList(target, list)
 		if v == target then return true end
 	end
 	return false
+end
+
+local function collectPet()
+    local data = dataService:GetData()
+
+    for _, p in pairs(data.PetsData.EquippedPets) do
+        PetsService:FireServer("UnequipPet", p)
+    end
 end
 
 local function getPlayers()
@@ -101,15 +114,15 @@ end
 
 local function countPet()
     local pets = {}
-    for _, p in ipairs(Backpack:GetChildren()) do
-        local name = p.Name
-        local petName, size = name:match("^(.-) %[(%d+%.?%d*) KG%]")
-        if petName then
-            if isInList(petName, listPet) then
-                table.insert(pets, petName)
-            end
+    local data = dataService:GetData()
+    
+    for _, p in pairs(data.PetsData.PetInventory.Data) do
+        local petType = p.PetType
+        if isInList(petType, listPet) then
+            table.insert(pets, petType)
         end
     end
+
     return #pets
 end
 
@@ -174,14 +187,12 @@ else
                                     task.wait(5)
                                     VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
                                 end)
-
-                                task.wait(3)
                             end
                         end
                     end
                 end
             end
-            task.wait(3)
+            task.wait(5)
         end
     end)
     task.spawn(function () 
