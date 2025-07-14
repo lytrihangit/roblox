@@ -173,6 +173,8 @@ else
                 break
             end
 
+	    collectPet()
+				
             writeData("", "Total : " .. countPet())
 
             if isEquidPet() then
