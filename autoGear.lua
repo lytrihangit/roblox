@@ -11,7 +11,7 @@ local BuyGearStock = GameEvents:WaitForChild("BuyGearStock")
 
 local fileName = LocalPlayer.Name .. ".json"
 
-local listGear = {"Levelup Lollipop"}
+local listGear = {"Levelup Lollipop", "Master Sprinkler", "Godly Sprinkler"}
 
 local function writeData(request, text)
 	writefile(fileName, HttpService:JSONEncode({ Request = request, Text = text }))
@@ -27,41 +27,37 @@ end
 local function getStockGear()
     local stockGear = {}
     local data = dataService:GetData()
-
-    for n, v in pairs(data.GearStock.Stocks) do
-        stockGear[n] = v.Stock
+    for n, _ in pairs(data.GearStock.Stocks) do
+        table.insert(stockGear, n)
     end
-
     return stockGear
 end
 
 local function getInventory()
 	local gears = {}
-
 	for _, tool in ipairs(Backpack:GetChildren()) do
-		local name = tool.Name
-        local toolName, qty = name:match("^(.-) x(%d+)$")
-        gears[toolName or name] = tonumber(qty) or 1
+        if tool:IsA("Tool") then
+            local name = tool.Name
+            if not name:find("Shovel") then
+                local toolName, qty = name:match("^(.-) x(%d+)$")
+                gears[toolName or name] = tonumber(qty) or 1
+            end
+        end
 	end
-
 	return gears
 end
 
 task.spawn(function () 
     while true do
-        writeData("", HttpService:JSONEncode(getInventory()))
-
         local success = false
         local stock = getStockGear()
 
-        for gName, gCount in pairs(stock) do
-            local gCount = tonumber(gCount)
+        writeData("", HttpService:JSONEncode(stock))
 
-            if isInList(gName, listGear) and gCount > 0 then
-                if gCount > 1 then
-                    for _ = 1, gCount do
-                        BuyGearStock:FireServer(gName)
-                    end
+        for _, s in ipairs(listGear) do
+            if isInList(s, stock) then
+                for _ = 1, 3 do
+                    BuyGearStock:FireServer(s)
                 end
                 success = true
             end
@@ -72,6 +68,6 @@ task.spawn(function ()
             break
         end
 
-        task.wait(5)
+        task.wait(15)
     end
 end)
