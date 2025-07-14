@@ -68,7 +68,7 @@ task.spawn(function ()
         end
 
         if success then
-            writeData("Completed", HttpService:JSONEncode(getInventory()))
+            writeData("RunAgain", HttpService:JSONEncode(getInventory()))
             break
         end
 
