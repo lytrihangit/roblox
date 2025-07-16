@@ -204,7 +204,7 @@ local function main()
 
                 BuyPetEgg:FireServer(eggName)
 
-                return true
+                -- return true
             end
         end
         task.wait(15)
