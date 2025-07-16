@@ -203,11 +203,12 @@ local function main()
                 writeData("", "Buying : " .. eggName)
 
                 BuyPetEgg:FireServer(eggName)
-
-                -- return true
             end
         end
-        task.wait(15)
+
+	hatchPets()
+		
+        task.wait(10)
     end
 end
 
