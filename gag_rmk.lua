@@ -189,6 +189,8 @@ end
 
 local function main()
     while true do
+        local success = false
+
         writeData("", "Wait Stock")
 
         hatchPets()
@@ -199,16 +201,18 @@ local function main()
 
         for _, eggName in ipairs(stock) do
             if isInList(eggName, listEggs) then
-
-                writeData("", "Buying : " .. eggName)
-
                 BuyPetEgg:FireServer(eggName)
+
+                success = true
             end
         end
 
-	hatchPets()
-		
-	writeData("RunAgain", HttpService:JSONEncode(getEggs()))
+        hatchPets()
+    
+        if success then
+            writeData("RunAgain", HttpService:JSONEncode(getEggs()))
+            break
+        end
 		
         task.wait(10)
     end
