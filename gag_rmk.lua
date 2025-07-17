@@ -208,6 +208,8 @@ local function main()
 
 	hatchPets()
 		
+	writeData("RunAgain", HttpService:JSONEncode(getEggs()))
+		
         task.wait(10)
     end
 end
@@ -215,9 +217,6 @@ end
 task.spawn(function ()
     local success, err = pcall(function ()
         main()
-        task.wait(0.5)
-
-        writeData("RunAgain", HttpService:JSONEncode(getEggs()))
     end)
 
     if not success then
