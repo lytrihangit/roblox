@@ -3,6 +3,7 @@ repeat wait() until game:IsLoaded()
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
+local VirtualUser = game:GetService('VirtualUser')
 
 local GameEvents = ReplicatedStorage:WaitForChild("GameEvents")
 local BuyPetEgg = GameEvents:WaitForChild("BuyPetEgg")
@@ -217,6 +218,11 @@ local function main()
         task.wait(10)
     end
 end
+
+LocalPlayer.Idled:Connect(function()
+    VirtualUser:CaptureController()
+    VirtualUser:ClickButton2(Vector2.new())
+end)
 
 task.spawn(function ()
     local success, err = pcall(function ()
