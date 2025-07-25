@@ -20,7 +20,7 @@ local fileName = LocalPlayer.Name .. ".json"
 
 local dataService = require(ReplicatedStorage.Modules:WaitForChild("DataService"))
 
-local listEggs = {"Bug Egg", "Paradise Egg", "Mythical Egg"}
+local listEggs = {"Bug Egg", "Paradise Egg", "Mythical Egg", "Dinosaur Egg"}
 local listPet = {"T-Rex", "Brontosaurus", "Red Fox", "Dragonfly", "Queen Bee", "Mimic Octopus"}
 
 local function writeData(request, text)
