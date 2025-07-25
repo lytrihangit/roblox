@@ -9,7 +9,6 @@ local GameEvents = ReplicatedStorage:WaitForChild("GameEvents")
 local BuyPetEgg = GameEvents:WaitForChild("BuyPetEgg")
 local Sell_Inventory = GameEvents:WaitForChild("Sell_Inventory")
 local PetEggService = GameEvents:WaitForChild("PetEggService")
-local DinoMachineService = GameEvents:WaitForChild("DinoMachineService_RE")
 
 local DataStream = GameEvents:WaitForChild("DataStream")
 
@@ -21,7 +20,7 @@ local fileName = LocalPlayer.Name .. ".json"
 
 local dataService = require(ReplicatedStorage.Modules:WaitForChild("DataService"))
 
-local listEggs = {"Dinosaur Egg", "Bug Egg", "Paradise Egg", "Mythical Egg", "Bee Egg"}
+local listEggs = {"Bug Egg", "Paradise Egg", "Mythical Egg"}
 local listPet = {"T-Rex", "Brontosaurus", "Red Fox", "Dragonfly", "Queen Bee", "Mimic Octopus"}
 
 local function writeData(request, text)
@@ -36,22 +35,6 @@ local function Teleport(pos)
 	local root = getCharacter():FindFirstChild("HumanoidRootPart")
 	if root then
 		getCharacter():SetPrimaryPartCFrame(pos)
-	end
-end
-
-local function sellInventory()
-    local PreviousSheckles = tonumber(Sheckles.Value)
-    if PreviousSheckles > 10000 then
-        return true
-    end
-    
-	while wait(10) do
-		Teleport(CFrame.new(86, 4, 1))
-		Sell_Inventory:FireServer()
-
-        if PreviousSheckles < tonumber(Sheckles.Value) then
-            return true
-        end
 	end
 end
 
@@ -123,7 +106,6 @@ end
 local function hatchPets()
     local farm, obj = getEggFarms()
 
-    -- hatch all pet time hatch = 0
     if #obj > 0 then
         for _, egg in ipairs(obj) do
             if egg:GetAttribute("OBJECT_TYPE") == "PetEgg" and egg:GetAttribute("TimeToHatch") == 0 then
@@ -135,7 +117,6 @@ local function hatchPets()
 
     task.wait(0.5)
 
-    -- plant all egg in list from inventory
 	local locations = farm.Important:FindFirstChild("Plant_Locations")
     for _, name in ipairs(listEggs) do
         for _, tool in ipairs(Backpack:GetChildren()) do
@@ -152,42 +133,6 @@ local function hatchPets()
     end
 end
 
-local function dinoMachine()
-    for _, p in ipairs(Backpack:GetChildren()) do
-        local name = p.Name
-        local petName, size = name:match("^(.-) %[(%d+%.?%d*) KG%]")
-
-        if petName and size then
-            if not isInList(petName, listPet) and tonumber(size) < 10 then
-                p.Parent = Character
-                
-                DinoMachineService:FireServer("MachineInteract")
-
-                task.wait(0.5)
-
-                return true
-            end
-        end
-    end
-end
-
-local function claimMachine()
-    DataStream.OnClientEvent:Connect(function(action, profile, data)
-        if action == "UpdateData" then
-            for _, entry in ipairs(data) do
-                local path, value = unpack(entry)
-                if path == "ROOT/DinoMachine/TimeLeft" then
-                    if tonumber(value) == 0 then
-                        DinoMachineService:FireServer("ClaimReward")
-
-                        return true
-                    end
-                end
-            end
-        end
-    end)
-end
-
 local function main()
     while true do
         local success = false
@@ -195,8 +140,6 @@ local function main()
         writeData("", "Wait Stock")
 
         hatchPets()
-
-        dinoMachine()
         
         local stock = getStock()
 
@@ -218,26 +161,16 @@ local function main()
         task.wait(10)
     end
 end
-
-LocalPlayer.Idled:Connect(function()
-    VirtualUser:CaptureController()
-    VirtualUser:ClickButton2(Vector2.new())
+task.spawn(function () 
+    LocalPlayer.Idled:Connect(function()
+        VirtualUser:CaptureController()
+        VirtualUser:ClickButton2(Vector2.new())
+    end)
 end)
 
 task.spawn(function ()
     local success, err = pcall(function ()
         main()
-    end)
-
-    if not success then
-        print("Error : " .. err)
-        writeData("", err)
-    end
-end)
-
-task.spawn(function ()
-    local success, err = pcall(function ()
-        claimMachine()
     end)
 
     if not success then
