@@ -1,1 +1,368 @@
-{"Select Eggs":["","Zen Egg"],"Auto Reclaimer Plants":false,"Prevent Feed Mutation Fruit":[""],"Select Mutations     ":[""],"Blacklist Weight Mode":[""],"Auto Buy Eggs":false,"Auto Buy Best Zen":false,"Auto Equip Watering Can":false,"Select NPC":["Zen Channeller"],"File Name":"","Auto Give Tranquil to Kitsune":false,"Select Seeds":["","Serenity","Sakura Bush"],"Auto UnFavourite All Fruits":false,"Select Fruits      ":[""],"Auto Buy All Seeds":false,"Select Pets      ":[""],"Infinite Jump":false,"Auto Buy Seeds":false,"Auto Give Fruits To Player":false,"Select Merchant":[""],"Select Blacklist Mutation":[""],"Auto Buy All Gears":false,"Select Gears":[""],"Threshold Weight   ":"0","Auto Favorite Plants":false,"Select Sprinkler  ":[""],"Auto Skipper At Rarity":false,"Enable Walkspeed":false,"Select Pets Middle":[""],"Auto Collect Most Valuable Fruits":false,"Age Threshold  ":"0","Select Rarity Seed ":[""],"Disable Collect Prompt":false,"Set Ping":"500","Background Transparency":0.1,"Auto Buy Merchant":false,"Select Mutation         ":[""],"Delay To Collect":"0","Place Version":"","Select Eggs ":["","Zen Egg"],"Move Original Plant Once Passive is Ended":false,"Select Plants":[""],"Select Fruits  ":[""],"Select Variant  ":[""],"Threshold Weight Mode  ":[""],"Select Whitelist Fruit":["","Serenity","Sakura Bush"],"Auto Place Crate":false,"Auto Collect Fruits ":false,"Select Whitelist Variant":[""],"Select Use Video Background":[""],"Weights Threshold  ":"0","Allow Sell If Backpack Is Max":false,"Auto Give Corrupt to Kitsune":false,"Prevent Sell Mutation":["","Tranquil"],"Auto Buy Zen":true,"Select File":[""],"Feed Until Max":false,"Delay To Gift":"0.1","Select Plants  ":[""],"Auto Claim Mutation Machine":false,"Auto UnFavorite Plants":false,"Remove Notification UI":false,"Select Variant         ":[""],"Show Value Money In Fruits":false,"Auto Hop Until Place Version":false,"Select Pets (For Pet Time) ":[""],"Delay To Hop":"5","Sell Pets":[""],"Instant Collect":false,"Select Seed Pack":["","Zen Seed Pack"],"Enable Prevent Mode":true,"Select Whitelist Mutation":[""],"Select Threshold Mode  ":[""],"Auto Collect Whitelisted Mutations":false,"Auto Place Eggs":true,"Auto Buy Cosmetic":false,"Enable Move Plants":false,"Stop Collect If Backpack Is Full Max":false,"Whitelist Weight Mode":[""],"Auto Buy Best Merchant":false,"Select Seed Recipes":[""],"Auto Pet Mutations (Fully)":false,"Select Blacklist Fruits  ":[""],"Select Language":[""],"Auto Plants All Seeds":false,"Select Pets   ":[""],"Input URL":"","Select Pets":[""],"Input Name":"","Select Assets Type":[""],"Select Theme":[""],"Select Use Image Background":[""],"Auto Collect Heaviest Fruits":false,"Whitelist Weight":"0","Auto Favourite Fruits":false,"Auto Buy All Merchant":false,"Show Screen White":false,"Select Position":["Random"],"Enable Set Ping":false,"Auto Equip All Pets":false,"Select Pets    ":["All"],"Auto Collect All Fruits":false,"Select Mutations    ":[""],"Auto Sell Pets":false,"ESP Eggs":false,"Delay To Plants":"1","Auto Middle Pets":false,"Select Mutation   ":[""],"Allow Show Value Money":false,"Auto Shovel Sprinkler":false,"Auto Submit All Tranquil":true,"Select Whitelist Mutations":[""],"Auto Reconnect":false,"Job ID":"","Select Pets (For Middle) ":[""],"Delay To Sell Inventory":"0","ESP Pets":false,"Auto Remove All Garden Players":false,"Select Position   ":[""],"Auto Craft":false,"Hide All Fruits":false,"Delay To Sprinkler":"0","Auto Hatch Eggs":true,"Auto Restore Stock In Zen Shop":false,"Hide All Tree":false,"Auto Buy Best Seeds":false,"Auto Buy Best Gears":false,"Prevent Sell Variant":["","Normal","Rainbow","Gold"],"Select Cosmetic":[""],"Auto Open If Found Crate Has Items  ":false,"Select Boost Item":[""],"Auto Buy All Zen":false,"Select Zen":["","Zen Seed Pack","Sakura Bush","Zen Egg"],"Select Fruits":[""],"Auto Plants Seed":true,"Auto Buy Gears":false,"Select Sprinkler":[""],"Select Pets     ":[""],"Auto UnFavourite Fruits":false,"Select Gear Recipes":[""],"Auto Buy All Eggs":false,"Select Blacklist Tree":[""],"Select Blacklist Fruits":[""],"Select Seed ":[""],"Auto Accept Trade":false,"Delay To Accept":"0.1","Allow Move Plants to Pets If Passive is ready":false,"Auto Collect Whitelisted Fruits":true,"Auto Give Favourited Fruits To Player":false,"ESP Crates":false,"Threshold Hunger":"","ESP Fruit":false,"Auto Shovel Tree":false,"Select Fruits   ":[""],"Select Players":[""],"Auto Buy Best Eggs":false,"Select Variant    ":[""],"Select Fruits    ":[""],"Prevent Sell Pets":[""],"Auto Hop Until Found Crate Has Items  ":false,"Select Crate":[""],"Select Items  ":[""],"Delay to Water ":"1","Auto Activate Crystal":false,"Select Tree  ":[""],"Delay To Place Crate":"0","Weight Threshold":"0","Pets Time ":"20s","Delay To Middle":"","Auto Feed Pets":false,"Auto Sell":true,"Auto Open Seedpack":true,"Auto Water Fruits":false,"Select Blacklist Variant":[""],"Set Speed":"","Select Mutations  ":[""],"Select Plants ":[""],"Auto Move Plants To Pets":false,"Delay To Place Eggs":"0","Auto Shovel Fruits":false,"Auto Sprinkler":false,"Select Whitelist Fruits":[""],"Select Variant   ":[""],"Select Threshold Mode":[""],"Blacklist Weight":"0","Select Fruits     ":[""],"Show Screen Black":false,"Instant Seedpack / Disable Animation":true,"Auto Cleaning Spray Fruits":false,"Select Position ":[""],"No Clip":false,"Auto Boost Pets":false,"Auto Middle Pets    ":false,"Auto Give Tranquil to NPCs":false,"Prevent Sell Fruits":["","Serenity","Sakura Bush"],"Stop Collect If Weather Is Here":false,"Auto UnFavorite All Plants":false,"Auto Collect Fruits":false}
+{
+  "Select Eggs": [
+    "",
+    "Zen Egg"
+  ],
+  "Auto Reclaimer Plants": false,
+  "Prevent Feed Mutation Fruit": [
+    ""
+  ],
+  "Select Mutations     ": [
+    ""
+  ],
+  "Blacklist Weight Mode": [
+    ""
+  ],
+  "Auto Buy Eggs": false,
+  "Auto Buy Best Zen": false,
+  "Auto Equip Watering Can": false,
+  "Select NPC": [
+    "Zen Channeller"
+  ],
+  "File Name": "",
+  "Auto Give Tranquil to Kitsune": false,
+  "Select Seeds": [
+    "",
+    "Serenity",
+    "Sakura Bush"
+  ],
+  "Auto UnFavourite All Fruits": false,
+  "Select Fruits      ": [
+    ""
+  ],
+  "Auto Buy All Seeds": false,
+  "Select Pets      ": [
+    ""
+  ],
+  "Infinite Jump": false,
+  "Auto Buy Seeds": false,
+  "Auto Give Fruits To Player": false,
+  "Select Merchant": [
+    ""
+  ],
+  "Select Blacklist Mutation": [
+    ""
+  ],
+  "Auto Buy All Gears": false,
+  "Select Gears": [
+    ""
+  ],
+  "Threshold Weight   ": "0",
+  "Auto Favorite Plants": false,
+  "Select Sprinkler  ": [
+    ""
+  ],
+  "Auto Skipper At Rarity": false,
+  "Enable Walkspeed": false,
+  "Select Pets Middle": [
+    ""
+  ],
+  "Auto Collect Most Valuable Fruits": false,
+  "Age Threshold  ": "0",
+  "Select Rarity Seed ": [
+    ""
+  ],
+  "Disable Collect Prompt": false,
+  "Set Ping": "500",
+  "Background Transparency": 0.1,
+  "Auto Buy Merchant": false,
+  "Select Mutation         ": [
+    ""
+  ],
+  "Delay To Collect": "0",
+  "Place Version": "",
+  "Select Eggs ": [
+    "",
+    "Zen Egg"
+  ],
+  "Move Original Plant Once Passive is Ended": false,
+  "Select Plants": [
+    ""
+  ],
+  "Select Fruits  ": [
+    ""
+  ],
+  "Select Variant  ": [
+    ""
+  ],
+  "Threshold Weight Mode  ": [
+    ""
+  ],
+  "Select Whitelist Fruit": [
+    "",
+    "Serenity",
+    "Sakura Bush"
+  ],
+  "Auto Place Crate": false,
+  "Auto Collect Fruits ": false,
+  "Select Whitelist Variant": [
+    ""
+  ],
+  "Select Use Video Background": [
+    ""
+  ],
+  "Weights Threshold  ": "0",
+  "Allow Sell If Backpack Is Max": false,
+  "Auto Give Corrupt to Kitsune": false,
+  "Prevent Sell Mutation": [
+    "",
+    "Tranquil"
+  ],
+  "Auto Buy Zen": true,
+  "Select File": [
+    ""
+  ],
+  "Feed Until Max": false,
+  "Delay To Gift": "0.1",
+  "Select Plants  ": [
+    ""
+  ],
+  "Auto Claim Mutation Machine": false,
+  "Auto UnFavorite Plants": false,
+  "Remove Notification UI": false,
+  "Select Variant         ": [
+    ""
+  ],
+  "Show Value Money In Fruits": false,
+  "Auto Hop Until Place Version": false,
+  "Select Pets (For Pet Time) ": [
+    ""
+  ],
+  "Delay To Hop": "5",
+  "Sell Pets": [
+    ""
+  ],
+  "Instant Collect": false,
+  "Select Seed Pack": [
+    "",
+    "Zen Seed Pack"
+  ],
+  "Enable Prevent Mode": true,
+  "Select Whitelist Mutation": [
+    ""
+  ],
+  "Select Threshold Mode  ": [
+    ""
+  ],
+  "Auto Collect Whitelisted Mutations": false,
+  "Auto Place Eggs": false,
+  "Auto Buy Cosmetic": false,
+  "Enable Move Plants": false,
+  "Stop Collect If Backpack Is Full Max": false,
+  "Whitelist Weight Mode": [
+    ""
+  ],
+  "Auto Buy Best Merchant": false,
+  "Select Seed Recipes": [
+    ""
+  ],
+  "Auto Pet Mutations (Fully)": false,
+  "Select Blacklist Fruits  ": [
+    ""
+  ],
+  "Select Language": [
+    ""
+  ],
+  "Auto Plants All Seeds": false,
+  "Select Pets   ": [
+    ""
+  ],
+  "Input URL": "",
+  "Select Pets": [
+    ""
+  ],
+  "Input Name": "",
+  "Select Assets Type": [
+    ""
+  ],
+  "Select Theme": [
+    ""
+  ],
+  "Select Use Image Background": [
+    ""
+  ],
+  "Auto Collect Heaviest Fruits": false,
+  "Whitelist Weight": "0",
+  "Auto Favourite Fruits": false,
+  "Auto Buy All Merchant": false,
+  "Show Screen White": false,
+  "Select Position": [
+    "Random"
+  ],
+  "Enable Set Ping": false,
+  "Auto Equip All Pets": false,
+  "Select Pets    ": [
+    "All"
+  ],
+  "Auto Collect All Fruits": false,
+  "Select Mutations    ": [
+    ""
+  ],
+  "Auto Sell Pets": false,
+  "ESP Eggs": false,
+  "Delay To Plants": "1",
+  "Auto Middle Pets": false,
+  "Select Mutation   ": [
+    ""
+  ],
+  "Allow Show Value Money": false,
+  "Auto Shovel Sprinkler": false,
+  "Auto Submit All Tranquil": true,
+  "Select Whitelist Mutations": [
+    ""
+  ],
+  "Auto Reconnect": false,
+  "Job ID": "",
+  "Select Pets (For Middle) ": [
+    ""
+  ],
+  "Delay To Sell Inventory": "0",
+  "ESP Pets": false,
+  "Auto Remove All Garden Players": false,
+  "Select Position   ": [
+    ""
+  ],
+  "Auto Craft": false,
+  "Hide All Fruits": false,
+  "Delay To Sprinkler": "0",
+  "Auto Hatch Eggs": false,
+  "Auto Restore Stock In Zen Shop": false,
+  "Hide All Tree": false,
+  "Auto Buy Best Seeds": false,
+  "Auto Buy Best Gears": false,
+  "Prevent Sell Variant": [
+    "",
+    "Normal",
+    "Rainbow",
+    "Gold"
+  ],
+  "Select Cosmetic": [
+    ""
+  ],
+  "Auto Open If Found Crate Has Items  ": false,
+  "Select Boost Item": [
+    ""
+  ],
+  "Auto Buy All Zen": false,
+  "Select Zen": [
+    "",
+    "Zen Seed Pack",
+    "Sakura Bush",
+    "Zen Egg"
+  ],
+  "Select Fruits": [
+    ""
+  ],
+  "Auto Plants Seed": true,
+  "Auto Buy Gears": false,
+  "Select Sprinkler": [
+    ""
+  ],
+  "Select Pets     ": [
+    ""
+  ],
+  "Auto UnFavourite Fruits": false,
+  "Select Gear Recipes": [
+    ""
+  ],
+  "Auto Buy All Eggs": false,
+  "Select Blacklist Tree": [
+    ""
+  ],
+  "Select Blacklist Fruits": [
+    ""
+  ],
+  "Select Seed ": [
+    ""
+  ],
+  "Auto Accept Trade": false,
+  "Delay To Accept": "0.1",
+  "Allow Move Plants to Pets If Passive is ready": false,
+  "Auto Collect Whitelisted Fruits": true,
+  "Auto Give Favourited Fruits To Player": false,
+  "ESP Crates": false,
+  "Threshold Hunger": "",
+  "ESP Fruit": false,
+  "Auto Shovel Tree": false,
+  "Select Fruits   ": [
+    ""
+  ],
+  "Select Players": [
+    ""
+  ],
+  "Auto Buy Best Eggs": false,
+  "Select Variant    ": [
+    ""
+  ],
+  "Select Fruits    ": [
+    ""
+  ],
+  "Prevent Sell Pets": [
+    ""
+  ],
+  "Auto Hop Until Found Crate Has Items  ": false,
+  "Select Crate": [
+    ""
+  ],
+  "Select Items  ": [
+    ""
+  ],
+  "Delay to Water ": "1",
+  "Auto Activate Crystal": false,
+  "Select Tree  ": [
+    ""
+  ],
+  "Delay To Place Crate": "0",
+  "Weight Threshold": "0",
+  "Pets Time ": "20s",
+  "Delay To Middle": "",
+  "Auto Feed Pets": false,
+  "Auto Sell": true,
+  "Auto Open Seedpack": true,
+  "Auto Water Fruits": false,
+  "Select Blacklist Variant": [
+    ""
+  ],
+  "Set Speed": "",
+  "Select Mutations  ": [
+    ""
+  ],
+  "Select Plants ": [
+    ""
+  ],
+  "Auto Move Plants To Pets": false,
+  "Delay To Place Eggs": "0",
+  "Auto Shovel Fruits": false,
+  "Auto Sprinkler": false,
+  "Select Whitelist Fruits": [
+    ""
+  ],
+  "Select Variant   ": [
+    ""
+  ],
+  "Select Threshold Mode": [
+    ""
+  ],
+  "Blacklist Weight": "0",
+  "Select Fruits     ": [
+    ""
+  ],
+  "Show Screen Black": false,
+  "Instant Seedpack / Disable Animation": true,
+  "Auto Cleaning Spray Fruits": false,
+  "Select Position ": [
+    ""
+  ],
+  "No Clip": false,
+  "Auto Boost Pets": false,
+  "Auto Middle Pets    ": false,
+  "Auto Give Tranquil to NPCs": false,
+  "Prevent Sell Fruits": [
+    "",
+    "Serenity",
+    "Sakura Bush"
+  ],
+  "Stop Collect If Weather Is Here": false,
+  "Auto UnFavorite All Plants": false,
+  "Auto Collect Fruits": false
+}
