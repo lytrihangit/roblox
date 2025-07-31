@@ -194,7 +194,7 @@
   "Select Pets    ": [
     "All"
   ],
-  "Auto Collect All Fruits": false,
+  "Auto Collect All Fruits": true,
   "Select Mutations    ": [
     ""
   ],
@@ -278,7 +278,7 @@
   "Auto Accept Trade": false,
   "Delay To Accept": "0.1",
   "Allow Move Plants to Pets If Passive is ready": false,
-  "Auto Collect Whitelisted Fruits": true,
+  "Auto Collect Whitelisted Fruits": false,
   "Auto Give Favourited Fruits To Player": false,
   "ESP Crates": false,
   "Threshold Hunger": "",
@@ -360,7 +360,12 @@
   "Prevent Sell Fruits": [
     "",
     "Serenity",
-    "Sakura Bush"
+    "Sakura Bush",
+    "Hinomai",
+    "Zen Rocks",
+    "Zenflare",
+    "Maple Apple",
+    "Taro Flower"
   ],
   "Stop Collect If Weather Is Here": false,
   "Auto UnFavorite All Plants": false,
