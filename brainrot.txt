@@ -1,0 +1,182 @@
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Leaderstats = LocalPlayer:WaitForChild("leaderstats")
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local Humanoid = Character:WaitForChild("Humanoid")
+local rootPart = Character:WaitForChild("HumanoidRootPart")
+local AnimalController = require(game:GetService("ReplicatedStorage").Controllers.AnimalController)
+
+LocalPlayer.CharacterAdded:Connect(function(char)
+    Character, Humanoid, rootPart = char, char:WaitForChild("Humanoid"), char:WaitForChild("HumanoidRootPart")
+end)
+
+-- ======= Utility =======
+local function moveToCFrame(cframe)
+    if not Humanoid then return end
+    Humanoid:MoveTo(cframe.Position)
+    local finished, conn = false
+    conn = Humanoid.MoveToFinished:Connect(function()
+        finished = true
+        conn:Disconnect()
+    end)
+
+    local start, timeout = tick(), 5
+    while not finished and tick() - start < timeout do task.wait(0.1) end
+    if not finished then warn("ket") end
+end
+
+local function parseMoney(text)
+    local multipliers = {K=1e3, M=1e6, B=1e9}
+    text = text:gsub("%$", ""):gsub("%/s", "")
+    local num, mult = text:match("(%d+%.?%d*)([KMB]?)")
+    return (tonumber(num) or 0) * (multipliers[mult] or 1)
+end
+
+-- ======= Base handling =======
+local function getBase()
+    for _, p in pairs(workspace.Plots:GetChildren()) do
+        local baseName = p.PlotSign.SurfaceGui.Frame.TextLabel.Text:gsub("'s Base", "")
+        if baseName == LocalPlayer.Name then return p end
+    end
+end
+
+local function collectBase(base)
+    if not base then return end
+    for _, p in pairs(base.AnimalPodiums:GetChildren()) do
+        local claim = p:FindFirstChild("Claim")
+        if claim then
+            local pos = claim:GetPivot().Position
+            moveToCFrame(CFrame.new(pos.X, pos.Y + 5, pos.Z))
+        end
+    end
+end
+
+local function checkBase(base)
+    if not base then return nil, 0, {} end
+    local podium = base:FindFirstChild("AnimalPodiums")
+    if not podium then return nil, 0, {} end
+
+    local list, count = {}, 0
+    for _, p in pairs(podium:GetChildren()) do
+        local gen = p:FindFirstChild("Base")
+            and p.Base:FindFirstChild("Spawn")
+            and p.Base.Spawn:FindFirstChild("Attachment")
+            and p.Base.Spawn.Attachment:FindFirstChild("AnimalOverhead")
+            and p.Base.Spawn.Attachment.AnimalOverhead:FindFirstChild("Generation")
+
+        if gen then
+            list[p.Name], count = parseMoney(gen.Text), count + 1
+        end
+    end
+    return podium, count, list
+end
+
+local function checkMinBase(list)
+    local minKey, minValue = nil, math.huge
+    for k, v in pairs(list) do
+        if v < minValue then minKey, minValue = k, v end
+    end
+    return minKey, minValue
+end
+
+local function delBase(podium, count, list)
+    if count <= 9 then return end
+    local minKey = checkMinBase(list)
+    if not minKey then return end
+    local sbase = podium:FindFirstChild(minKey)
+    if not sbase then return end
+
+    local pos = sbase:GetPivot().Position
+    moveToCFrame(CFrame.new(pos.X, pos.Y + 5, pos.Z))
+    task.wait(1)
+
+    local prompt
+    local promptFolder = sbase:FindFirstChild("Base")
+        and sbase.Base:FindFirstChild("Spawn")
+        and sbase.Base.Spawn:FindFirstChild("PromptAttachment")
+
+    if promptFolder then
+        local prompts = promptFolder:GetChildren()
+        if #prompts >= 2 and prompts[2]:IsA("ProximityPrompt") then
+            prompt = prompts[2]
+        end
+    end
+
+    if prompt then task.spawn(function() fireproximityprompt(prompt, 7) end) end
+end
+
+-- ======= Animal handling =======
+local function bestAnimal()
+    local listpet = {}
+    for uid in pairs(AnimalController:GetAnimals()) do
+        local animal = workspace:FindFirstChild(uid)
+        local gen = animal
+            and animal:FindFirstChild("Part")
+            and animal.Part:FindFirstChild("Info")
+            and animal.Part.Info:FindFirstChild("AnimalOverhead")
+        if gen then
+            local overhead = gen
+            if parseMoney(overhead.Price.Text) <= Leaderstats.Cash.Value then
+                listpet[uid] = parseMoney(overhead.Generation.Text)
+            end
+        end
+    end
+
+    local best, val = nil, 0
+    for k, v in pairs(listpet) do
+        if v > val then best, val = k, v end
+    end
+    return best, val
+end
+
+local function buyAnimal(animalId)
+    local animal = workspace:FindFirstChild(animalId)
+    if not animal then return end
+    local oldPos = animal:GetPivot().Position
+
+    repeat
+        animal = workspace:FindFirstChild(animalId)
+        if not animal then break end
+
+        local pivot, pos = animal:GetPivot().Position, nil
+        pos = CFrame.new(pivot.X, pivot.Y + 2, pivot.Z)
+        moveToCFrame(pos)
+
+        local prompt = animal:FindFirstChildWhichIsA("ProximityPrompt", true)
+        if prompt then
+            task.spawn(function()
+                prompt:InputHoldBegin()
+                task.wait(7)
+                prompt:InputHoldEnd()
+            end)
+        end
+    until not workspace:FindFirstChild(animalId)
+
+    LocalPlayer.Character.Humanoid.Health = 0
+end
+
+-- ======= Main loop =======
+task.spawn(function()
+    local success, err = pcall(function()
+        while task.wait(1) do
+            local base = getBase()
+            local podium, count, list = checkBase(base)
+            local bestId, bestVal = bestAnimal()
+
+            if count == 10 then
+                local _, minVal = checkMinBase(list)
+                if bestVal > minVal then
+                    delBase(podium, count, list)
+                    buyAnimal(bestId)
+                end
+            else
+                if bestId then
+                    buyAnimal(bestId)
+                end
+            end
+
+            collectBase(base)
+        end
+    end)
+    if not success then warn("Có lỗi:", err) end
+end)
