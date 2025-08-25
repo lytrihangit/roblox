@@ -96,7 +96,7 @@ local function delBase(podium, count, list)
     moveToCFrame(CFrame.new(pos.X, pos.Y + 5, pos.Z))
     task.wait(1)
 
-    Net:WaitForChild("RE/PlotService/Sell"):FireServer(minKey)
+    Net:WaitForChild("RE/PlotService/Sell"):FireServer(tonumber(minKey))
 
     -- local prompt
     -- local promptFolder = sbase:FindFirstChild("Base")
