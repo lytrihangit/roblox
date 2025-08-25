@@ -5,6 +5,7 @@ local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local Humanoid = Character:WaitForChild("Humanoid")
 local rootPart = Character:WaitForChild("HumanoidRootPart")
 local AnimalController = require(game:GetService("ReplicatedStorage").Controllers.AnimalController)
+local Net = game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Net")
 
 LocalPlayer.CharacterAdded:Connect(function(char)
     Character, Humanoid, rootPart = char, char:WaitForChild("Humanoid"), char:WaitForChild("HumanoidRootPart")
@@ -30,6 +31,11 @@ local function parseMoney(text)
     text = text:gsub("%$", ""):gsub("%/s", "")
     local num, mult = text:match("(%d+%.?%d*)([KMB]?)")
     return (tonumber(num) or 0) * (multipliers[mult] or 1)
+end
+
+-- ======= Event handling =======
+local function Event()
+    Net:WaitForChild("RE/GalaxyEventService/Spin"):FireServer()
 end
 
 -- ======= Base handling =======
@@ -90,19 +96,20 @@ local function delBase(podium, count, list)
     moveToCFrame(CFrame.new(pos.X, pos.Y + 5, pos.Z))
     task.wait(1)
 
-    local prompt
-    local promptFolder = sbase:FindFirstChild("Base")
-        and sbase.Base:FindFirstChild("Spawn")
-        and sbase.Base.Spawn:FindFirstChild("PromptAttachment")
+    Net:WaitForChild("RE/PlotService/Sell"):FireServer(minKey)
 
-    if promptFolder then
-        local prompts = promptFolder:GetChildren()
-        if #prompts >= 2 and prompts[2]:IsA("ProximityPrompt") then
-            prompt = prompts[2]
-        end
-    end
+    -- local prompt
+    -- local promptFolder = sbase:FindFirstChild("Base")
+    --     and sbase.Base:FindFirstChild("Spawn")
+    --     and sbase.Base.Spawn:FindFirstChild("PromptAttachment")
 
-    if prompt then task.spawn(function() fireproximityprompt(prompt, 7) end) end
+    -- if promptFolder then
+    --     local prompts = promptFolder:GetChildren()
+    --     if #prompts >= 2 and prompts[2]:IsA("ProximityPrompt") then
+    --         prompt = prompts[2]
+    --     end
+    -- end
+    -- if prompt then task.spawn(function() fireproximityprompt(prompt, 7) end) end
 end
 
 -- ======= Animal handling =======
