@@ -246,7 +246,9 @@ task.spawn(function()
     while true do
         buyPlatform()
         EquipBestBrainrots:FireServer()
-        task.wait(5)
+        task.wait(1)
+		ItemSell:FireServer()
+		task.wait(5)
     end
 end)
 
