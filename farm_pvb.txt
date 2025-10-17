@@ -248,6 +248,7 @@ task.spawn(function()
         EquipBestBrainrots:FireServer()
         task.wait(1)
 		ItemSell:FireServer()
+		task.wait(0.3)
 		ItemSell:FireServer()
 		task.wait(5)
     end
