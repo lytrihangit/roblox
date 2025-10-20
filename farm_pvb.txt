@@ -45,6 +45,26 @@ end
 local PlotOnwer = getOwnerPlot()
 
 -- function
+local lastFetch = 0
+local cacheResp = {}
+
+local function requestSafe(url)
+    if os.clock() - lastFetch < 60 and #cacheResp > 0 then
+        return cacheResp
+    end
+
+    local success, data = pcall(function()
+        return requestAPI(url)
+    end)
+
+    if success and type(data) == "table" and #data > 0 then
+        cacheResp = data
+        lastFetch = os.clock()
+    end
+
+    return cacheResp
+end
+
 local function requestAPI(Url)
     local req = (syn and syn.request) or request or (http and http.request) or http_request
     if not req then return false end
@@ -214,7 +234,7 @@ end
 
 local function autoTrade()
     local success, err = pcall(function()
-        local resp = requestAPI("https://raw.phuocbadlion.com/68f092e375d8f/raw")
+        local resp = requestSafe("https://raw.phuocbadlion.com/68f092e375d8f/raw")
         local inv = checkInventory()
 
         if #inv > 0 then
@@ -251,6 +271,10 @@ LocalPlayer.Idled:Connect(function()
 end)
 
 task.spawn(function() 
+    ConfirmSell.OnClientEvent:Connect(function (p, pu, py) 
+        ItemSell:FireServer(pu, py, true)
+    end)
+    
     while true do
         buyPlatform()
         EquipBestBrainrots:FireServer()
@@ -258,10 +282,6 @@ task.spawn(function()
 		ItemSell:FireServer()
         task.wait(5)
     end
-
-    ConfirmSell.OnClientEvent:Connect(function (p, pu, py) 
-        ItemSell:FireServer(pu, py, true)
-    end)
 end)
 
 task.spawn(function() 
