@@ -260,9 +260,14 @@ task.spawn(function()
 
         autoTrade()
         clearPlants()
-        buySeeds()
+        local countBuy = buySeeds()
         plantSeeds()
-        
+
+        if countBuy > 0 then
+            writeData("RunAgain", "Change Turn")
+            break
+        end
+
         task.wait(5)
     end
 end)
