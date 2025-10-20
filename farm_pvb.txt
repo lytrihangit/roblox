@@ -1,15 +1,20 @@
-repeat wait() until game:IsLoaded()
--- Config
-local SeedBuy = _G.seeds
-local PlantTrade = _G.plant
--- Players
-local Players = game:GetService('Players')
+repeat task.wait() until game:IsLoaded()
+
+--// Config
+local SeedBuy = _G.seeds or {}
+local PlantTrade = _G.plant or {}
+
+--// Services
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local HttpService = game:GetService("HttpService")
+local VirtualUser = game:GetService("VirtualUser")
+
 local LocalPlayer = Players.LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-local Backpack = LocalPlayer:WaitForChild('Backpack')
-local Humanoid = Character:WaitForChild("Humanoid")
--- Remotes
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Backpack = LocalPlayer:WaitForChild("Backpack")
+
+--// Remotes
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local Assets = ReplicatedStorage:WaitForChild("Assets")
 local BuyItem = Remotes:WaitForChild("BuyItem")
@@ -18,285 +23,198 @@ local EquipBestBrainrots = Remotes:WaitForChild("EquipBestBrainrots")
 local PlaceItem = Remotes:WaitForChild("PlaceItem")
 local ItemSell = Remotes:WaitForChild("ItemSell")
 local ConfirmSell = Remotes:WaitForChild("ConfirmSell")
-local FavoriteItem = Remotes:WaitForChild("FavoriteItem")
-local BuyRow = Remotes:WaitForChild("BuyRow")
 local RemoveItem = Remotes:WaitForChild("RemoveItem")
-local SpawnTutorialBrainrot = Remotes:WaitForChild("SpawnTutorialBrainrot")
-local FinishTutorial = Remotes:WaitForChild("FinishTutorial")
 local GiftItem = Remotes:WaitForChild("GiftItem")
 
--- Options
-local TeleportService = game:GetService("TeleportService")
-local HttpService = game:GetService("HttpService")
-local VirtualUser = game:GetService('VirtualUser')
-
--- Player Data
+--// PlayerData & Plot
 local PlayerData = require(ReplicatedStorage:WaitForChild("PlayerData"))
-local PlotAsync = require(ReplicatedStorage.Modules.Utility.Util):GetPlotAsync(LocalPlayer)
-local General = require(ReplicatedStorage:WaitForChild("Modules"):WaitForChild("Library"):WaitForChild("General"))
-
-local function getOwnerPlot()
-    for _, v in pairs(workspace.Plots:GetChildren()) do
-        if v:GetAttribute("Owner") == LocalPlayer.Name then
-            return v
-        end
-    end
+local PlotOnwer
+for _, v in pairs(workspace.Plots:GetChildren()) do
+	if v:GetAttribute("Owner") == LocalPlayer.Name then
+		PlotOnwer = v
+		break
+	end
 end
-local PlotOnwer = getOwnerPlot()
 
--- function
-local lastFetch = 0
-local cacheResp = {}
+--// Cache & Safe Network
+local lastFetch, cacheResp = 0, {}
 
-local function requestAPI(Url)
-    local req = (syn and syn.request) or request or (http and http.request) or http_request
-    local res = req({
-        Url = Url,
-        Method = "GET"
-    })
- 
-    return HttpService:JSONDecode(tostring(res.Body)) or {}
+local function safeDecode(str)
+	local ok, result = pcall(function() return HttpService:JSONDecode(str) end)
+	return ok and result or {}
+end
+
+local function requestAPI(url)
+	local req = (syn and syn.request) or request or (http and http.request) or http_request
+	if not req then return {} end
+	local res = req({Url = url, Method = "GET"})
+	return safeDecode(tostring(res.Body))
 end
 
 local function requestSafe(url)
-    if os.clock() - lastFetch < 120 and #cacheResp > 0 then
-        return cacheResp
-    end
-
-    local success, data = pcall(function()
-        return requestAPI(url)
-    end)
-
-    if success and type(data) == "table" and #data > 0 then
-        cacheResp = data
-        lastFetch = os.clock()
-    end
-
-    return cacheResp
-end
-
-local function writeData(request, text)
-	writefile(LocalPlayer.Name .. ".json", HttpService:JSONEncode({ Request = request, Text = text }))
-end
-
-local function isInList(target, list)
-	for _, v in ipairs(list) do
-		if v == target then return true end
+	if tick() - lastFetch < 60 and #cacheResp > 0 then return cacheResp end
+	local ok, data = pcall(requestAPI, url)
+	if ok and type(data) == "table" and #data > 0 then
+		cacheResp, lastFetch = data, tick()
 	end
+	return cacheResp
+end
+
+--// Write Safe
+local function writeData(req, text)
+	local ok, err = pcall(function()
+		writefile(LocalPlayer.Name .. ".json", HttpService:JSONEncode({Request = req, Text = text}))
+	end)
+	if not ok then warn("[writeData Error]:", err) end
+end
+
+--// Helper
+local function isInList(target, list)
+	for _, v in ipairs(list) do if v == target then return true end end
 	return false
 end
 
-local function buyPlatform()
-    local DataUser = PlayerData:GetData().Data
-    local slotBuy = {}
-    for k, _ in DataUser.Platforms do
-        table.insert(slotBuy, tonumber(k))
-    end
+local function isOnline(name)
+	for _, v in ipairs(Players:GetPlayers()) do
+		if v.Name == name then return true end
+	end
+end
 
-    local slot = (#slotBuy + 1)
-    if slot < 4 then
-        BuyPlatform:FireServer(tostring(slot))
-    end
+--// Farm Logic
+local function buyPlatform()
+	local Platforms = PlayerData:GetData().Data.Platforms
+	local count = 0
+	for _ in pairs(Platforms) do count += 1 end
+	if count < 4 then BuyPlatform:FireServer(tostring(count + 1)) end
 end
 
 local function getPlants(row)
-    local DataUser = PlayerData:GetData().Data
-    local Planted = DataUser.Planted
-    local result = {}
-
-    for id, plant in pairs(Planted) do
-        if plant.Row == row then
-            local time = (plant.Time) or 0
-            table.insert(result, {Id = id, Plant = plant, Time = time})
-        end
-    end
-
-    return result
+	local Planted = PlayerData:GetData().Data.Planted
+	local result = {}
+	for id, plant in pairs(Planted) do
+		if plant.Row == row then
+			table.insert(result, {Id = id, Plant = plant, Time = plant.Time or 0})
+		end
+	end
+	return result
 end
 
 local function getRows()
-    local result = {}
-
-    for _, v in pairs(PlotOnwer.Rows:GetChildren()) do
-        local enabled = v:GetAttribute('Enabled') or false
-        
-        local row = tonumber(v.Name)
-        local plants = getPlants(row) 
-
-        result[row] = { enabled = enabled, plants = #plants }
-    end
-
-    return result
+	local rows = {}
+	for _, r in pairs(PlotOnwer.Rows:GetChildren()) do
+		local rowNum = tonumber(r.Name)
+		local enabled = r:GetAttribute("Enabled")
+		local plants = getPlants(rowNum)
+		rows[rowNum] = {enabled = enabled, plants = #plants}
+	end
+	return rows
 end
 
 local function clearPlants()
-    local rows = getRows()
-    
-    for k, v in pairs(rows) do
-        if v.enabled and v.plants > 0 then
-            local plants = getPlants(k)
-            
-            for _, v in ipairs(plants) do
-                if v.Time == 0 then
-                    RemoveItem:FireServer(v.Id)
-
-                    task.wait(0.5)
-                end
-            end
-        end
-    end
+	for k, v in pairs(getRows()) do
+		if v.enabled and v.plants > 0 then
+			for _, plant in ipairs(getPlants(k)) do
+				if plant.Time == 0 then
+					RemoveItem:FireServer(plant.Id)
+					task.wait(0.4)
+				end
+			end
+		end
+	end
 end
 
 local function buySeeds()
-    local seedStock = Assets:WaitForChild("Seeds")
-    local listSeed = {}
-    local countBuy = 0
-    for _, seed in pairs(seedStock:GetChildren()) do
-        local stock = seed:GetAttribute("Stock")
-        if isInList(seed.Name, SeedBuy) and stock > 0 then
-            listSeed[seed.Name] = stock
-            countBuy += 1
-        end
-    end
-
-    for k, v in pairs(listSeed) do
-        for i = 1, v do
-            BuyItem:FireServer(k)
-
-            task.wait(0.5)
-        end
-    end
-
-    return countBuy
+	local stock = Assets:WaitForChild("Seeds")
+	for _, seed in pairs(stock:GetChildren()) do
+		local sName, sStock = seed.Name, seed:GetAttribute("Stock")
+		if sStock > 0 and isInList(sName, SeedBuy) then
+			for i = 1, sStock do
+				BuyItem:FireServer(sName)
+				task.wait(0.35)
+			end
+		end
+	end
 end
 
 local function plantSeeds()
-    for _, c in pairs({Backpack, Character}) do
-        for _, v in pairs(c:GetChildren()) do
-            local itemName = v:GetAttribute("ItemName")
-            if isInList(itemName, SeedBuy) then
-                local id = v:GetAttribute("ID")
-                local item = v:GetAttribute("Plant")
-
-                local rows = getRows()
-                local p = v
-
-                for k, v in pairs(rows) do
-                    if not v.enabled then
-                        continue
-                    end
-                    
-                    if v.plants < 5 then
-                        local grass = PlotOnwer.Rows[k].Grass:GetChildren()
-                        local randomGrass = grass[math.random(1, #grass)]
-                        
-                        p.Parent = Character
-
-                        PlaceItem:FireServer({
-                            ["Item"] = item,
-                            ["CFrame"] = randomGrass.CFrame,
-                            ["ID"] = id,
-                            ["Floor"] = randomGrass
-                        })
-                    end
-
-                    task.wait(1)
-                end
-            end
-        end
-    end
-end
-
-local function isOnline(name)
-    for _, v in ipairs(Players:GetPlayers()) do
-        if v.Name == name then
-            return true
-        end
-    end
-    return false
+	local rows = getRows()
+	for _, container in pairs({Backpack, Character}) do
+		for _, v in pairs(container:GetChildren()) do
+			local itemName = v:GetAttribute("ItemName")
+			if itemName and isInList(itemName, SeedBuy) then
+				local id, item = v:GetAttribute("ID"), v:GetAttribute("Plant")
+				for row, r in pairs(rows) do
+					if r.enabled and r.plants < 5 then
+						local grassList = PlotOnwer.Rows[row].Grass:GetChildren()
+						local floor = grassList[math.random(1, #grassList)]
+						v.Parent = Character
+						PlaceItem:FireServer({Item = item, CFrame = floor.CFrame, ID = id, Floor = floor})
+						task.wait(0.5)
+					end
+				end
+			end
+		end
+	end
 end
 
 local function checkInventory()
-    local data = {}
-    for _, c in pairs({Backpack, Character}) do
-        for _, v in pairs(c:GetChildren()) do
-            local IsPlant = v:GetAttribute("IsPlant")
-            local Damage = v:GetAttribute("Damage")
-            if isInList(IsPlant, PlantTrade) then
-                table.insert(data, v)
-            end
-        end
-    end
-    return data
+	local data = {}
+	for _, container in pairs({Backpack, Character}) do
+		for _, v in pairs(container:GetChildren()) do
+			if isInList(v:GetAttribute("IsPlant"), PlantTrade) then
+				table.insert(data, v)
+			end
+		end
+	end
+	return data
 end
 
 local function autoTrade()
-    local success, err = pcall(function()
-        local resp = requestSafe("https://raw.phuocbadlion.com/68f092e375d8f/raw")
-        local inv = checkInventory()
-
-        if #inv > 0 then
-            for _, userReceive in ipairs(resp) do
-                if isOnline(userReceive) then
-                    for _, plant in pairs(inv) do
-                        if plant and plant.Parent then
-                            plant.Parent = Character
-
-                            local args = {
-                                [1] = {
-                                    ["Item"] = plant,
-                                    ["ToGift"] = userReceive
-                                }
-                            }
-                            GiftItem:FireServer(unpack(args))
-                            task.wait(3)
-                        end
-                    end
-                end
-            end
-        end
-    end)
-
-    if not success then
-        warn("[autoTrade Error]:", err)
-    end
+	local ok, err = pcall(function()
+		local receivers = requestSafe("https://raw.phuocbadlion.com/68f092e375d8f/raw")
+		local inv = checkInventory()
+		if #inv == 0 or #receivers == 0 then return end
+		for _, name in ipairs(receivers) do
+			if isOnline(name) then
+				for _, plant in ipairs(inv) do
+					if plant and plant.Parent then
+						GiftItem:FireServer({{Item = plant, ToGift = name}})
+						task.wait(2.5)
+					end
+				end
+			end
+		end
+	end)
+	if not ok then warn("[autoTrade Error]:", err) end
 end
--- end function
 
+--// Idle Prevent
 LocalPlayer.Idled:Connect(function()
-    VirtualUser:CaptureController()
-    VirtualUser:ClickButton2(Vector2.new())
+	VirtualUser:CaptureController()
+	VirtualUser:ClickButton2(Vector2.new())
 end)
 
-task.spawn(function() 
-    ConfirmSell.OnClientEvent:Connect(function (p, pu, py) 
-        ItemSell:FireServer(pu, py, true)
-    end)
+--// Auto Sell Loop
+task.spawn(function()
+	ConfirmSell.OnClientEvent:Connect(function(_, pu, py)
+		ItemSell:FireServer(pu, py, true)
+	end)
 
-    while true do
-        buyPlatform()
-        EquipBestBrainrots:FireServer()
-        task.wait(0.5)
+	while task.wait(5) do
+		buyPlatform()
+		EquipBestBrainrots:FireServer()
+		task.wait(0.3)
 		ItemSell:FireServer()
-        task.wait(5)
-    end
+	end
 end)
 
-task.spawn(function() 
-    while true do
-        writeData("", "Farming...")
-
-        autoTrade()
-        clearPlants()
-        -- local countBuy = buySeeds()
-        buySeeds()
-        plantSeeds()
-
-        -- if countBuy > 0 then
-        --     writeData("RunAgain", "Change Turn")
-        --     break
-        -- end
-
-        task.wait(5)
-    end
+--// Main Farm Loop
+task.spawn(function()
+	while task.wait(5) do
+		writeData("", "Farming...")
+		autoTrade()
+		clearPlants()
+		buySeeds()
+		plantSeeds()
+	end
 end)
