@@ -59,7 +59,7 @@ local function requestAPI(Url)
 end
 
 local function requestSafe(url)
-    if os.clock() - lastFetch < 60 and #cacheResp > 0 then
+    if os.clock() - lastFetch < 120 and #cacheResp > 0 then
         return cacheResp
     end
 
