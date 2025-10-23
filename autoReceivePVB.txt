@@ -1,6 +1,6 @@
 repeat wait() until game:IsLoaded()
 
-local config = _G.config
+local TIMEDELAY = 180
 -- Players
 local Players = game:GetService('Players')
 local LocalPlayer = Players.LocalPlayer
@@ -66,7 +66,7 @@ task.spawn(function()
                 break
             end
 
-            if tick() - lastReceiveTime >= config.TimeDelay then
+            if tick() - lastReceiveTime >= TIMEDELAY then
                 writeData("ChangeServer", "Receive : " .. tostring(#inv))
                 break
             end
