@@ -1,7 +1,7 @@
 repeat wait() until game:IsLoaded()
 -- Config
+local ApiURL = _G.apiurl
 local SeedBuy = _G.seeds
-local PlantTrade = _G.plant
 -- Players
 local Players = game:GetService('Players')
 local LocalPlayer = Players.LocalPlayer
@@ -55,11 +55,11 @@ local function requestAPI(Url)
         Method = "GET"
     })
  
-    return HttpService:JSONDecode(tostring(res.Body)) or {}
+    return HttpService:JSONDecode(tostring(res.Body)) or cacheResp
 end
 
 local function requestSafe(url)
-    if os.clock() - lastFetch < 120 and #cacheResp > 0 then
+    if os.clock() - lastFetch < 180 and next(cacheResp) ~= nil then
         return cacheResp
     end
 
@@ -67,7 +67,7 @@ local function requestSafe(url)
         return requestAPI(url)
     end)
 
-    if success and type(data) == "table" and #data > 0 then
+    if success and type(data) == "table" and next(data) ~= nil then
         cacheResp = data
         lastFetch = os.clock()
     end
@@ -89,7 +89,7 @@ end
 local function buyPlatform()
     local DataUser = PlayerData:GetData().Data
     local slotBuy = {}
-    for k, _ in DataUser.Platforms do
+    for k, _ in pairs(DataUser.Platforms) do
         table.insert(slotBuy, tonumber(k))
     end
 
@@ -216,13 +216,12 @@ local function isOnline(name)
     return false
 end
 
-local function checkInventory()
+local function checkInventory(plantTrade)
     local data = {}
     for _, c in pairs({Backpack, Character}) do
         for _, v in pairs(c:GetChildren()) do
             local IsPlant = v:GetAttribute("IsPlant")
-            local Damage = v:GetAttribute("Damage")
-            if isInList(IsPlant, PlantTrade) then
+            if IsPlant == plantTrade then
                 table.insert(data, v)
             end
         end
@@ -232,24 +231,24 @@ end
 
 local function autoTrade()
     local success, err = pcall(function()
-        local resp = requestSafe("https://raw.phuocbadlion.com/68f092e375d8f/raw")
-        local inv = checkInventory()
+        local resp = requestSafe(ApiURL)
 
-        if #inv > 0 then
-            for _, userReceive in ipairs(resp) do
-                if isOnline(userReceive) then
-                    for _, plant in pairs(inv) do
-                        if plant and plant.Parent then
-                            plant.Parent = Character
+        for plantReceive, userReceive in pairs(resp) do
+            local inv = checkInventory(plantReceive)
 
-                            local args = {
-                                [1] = {
-                                    ["Item"] = plant,
-                                    ["ToGift"] = userReceive
-                                }
-                            }
-                            GiftItem:FireServer(unpack(args))
-                            task.wait(3)
+            if #inv > 0 then
+                for _, u in pairs(userReceive) do
+                    if isOnline(u) then
+                        for _, pl in pairs(inv) do
+                            if pl and pl.Parent then
+                                pl.Parent = Character
+
+                                GiftItem:FireServer({
+                                    ["Item"] = pl,
+                                    ["ToGift"] = u
+                                })
+                            end
+                            task.wait(5)
                         end
                     end
                 end
@@ -258,7 +257,7 @@ local function autoTrade()
     end)
 
     if not success then
-        warn("[autoTrade Error]:", err)
+        writeData("", "[autoTrade] : " .. err)
     end
 end
 -- end function
@@ -284,12 +283,22 @@ end)
 
 task.spawn(function() 
     while true do
-        writeData("", "Farming...")
+        local success, err = pcall(function() 
+            writeData("", "Farming...")
 
-        autoTrade()
-        clearPlants()
-        buySeeds()
-        plantSeeds()
+            autoTrade()
+            clearPlants()
+            local count = buySeeds()
+            if count > 0 then
+                plantSeeds()
+                writeData("RunAgain", "Change Account")
+                break
+            end
+        end)
+        
+        if not success then
+            writeData("", err)
+        end
 
         task.wait(5)
     end
