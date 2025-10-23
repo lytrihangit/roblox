@@ -1,0 +1,82 @@
+repeat wait() until game:IsLoaded()
+
+local config = _G.config
+-- Players
+local Players = game:GetService('Players')
+local LocalPlayer = Players.LocalPlayer
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local Backpack = LocalPlayer:WaitForChild('Backpack')
+-- Remotes
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Remotes = ReplicatedStorage:WaitForChild("Remotes")
+local GiftItem = Remotes:WaitForChild("GiftItem")
+local AcceptGift = Remotes:WaitForChild("AcceptGift")
+local SpawnTutorialBrainrot = Remotes:WaitForChild("SpawnTutorialBrainrot")
+local FinishTutorial = Remotes:WaitForChild("FinishTutorial")
+-- Options
+local HttpService = game:GetService("HttpService")
+
+local PlayerData = require(ReplicatedStorage:WaitForChild("PlayerData"))
+
+local function writeData(request, text)
+	writefile(LocalPlayer.Name .. ".json", HttpService:JSONEncode({ Request = request, Text = text }))
+end
+
+local lastReceiveTime = tick()
+
+local function checkInventory()
+    local data = {}
+    for _, c in pairs({Backpack, Character}) do
+        for _, v in pairs(c:GetChildren()) do
+            local IsPlant = v:GetAttribute("IsPlant")
+            if IsPlant then
+                table.insert(data, v)
+            end
+        end
+    end
+    return data
+end
+
+task.spawn(function() 
+    GiftItem.OnClientEvent:Connect(function(p)
+        AcceptGift:FireServer({
+            ["ID"] = p.ID
+        })
+        lastReceiveTime = tick()
+    end)
+
+    while true do
+        local success, err = pcall(function() 
+            local inv = checkInventory()
+            writeData("", "Receive : " .. tostring(#inv))
+
+            local DataUser = PlayerData:GetData().Data
+
+            while not DataUser.SeenTutorial do
+                SpawnTutorialBrainrot:FireServer()
+                FinishTutorial:FireServer()
+
+                task.wait(0.5)
+
+                DataUser = PlayerData:GetData().Data
+            end
+
+            if #inv == 248 then
+                writeData("Completed", "Receive : " .. tostring(#inv))
+                break
+            end
+
+            if tick() - lastReceiveTime >= config.TimeDelay then
+                writeData("ChangeServer", "Receive : " .. tostring(#inv))
+                break
+            end
+        end)
+
+        if not success then
+            writeData("RunAgain", err)
+            break
+        end
+
+        task.wait(5)
+    end
+end)
