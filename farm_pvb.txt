@@ -33,6 +33,7 @@ local General = require(Modules:WaitForChild("Library"):WaitForChild("General"))
 local Util = require(Modules:WaitForChild("Utility"):WaitForChild("Util"))
 
 -- Global Config
+local AUTO_CHANGE_ACCOUNT = true
 local API_URL = "https://raw.phuocbadlion.com/68f9d6ccf0766/raw"
 local RARITY_SEED = {"Secret"}
 local lastFetch = 0
@@ -309,7 +310,7 @@ task.spawn(function()
             writeData("", err)
         end
 
-        if changeAccount then
+        if changeAccount and AUTO_CHANGE_ACCOUNT then
             writeData("RunAgain", "Change Account")
             break
         end
