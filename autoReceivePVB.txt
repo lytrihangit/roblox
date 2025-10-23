@@ -1,6 +1,6 @@
 repeat wait() until game:IsLoaded()
 
-local TIMEDELAY = 180
+local TIMEDELAY = 300
 -- Players
 local Players = game:GetService('Players')
 local LocalPlayer = Players.LocalPlayer
@@ -46,34 +46,27 @@ task.spawn(function()
     end)
 
     while true do
-        local success, err = pcall(function() 
-            local inv = checkInventory()
-            writeData("", "Receive : " .. tostring(#inv))
+        local inv = checkInventory()
+        writeData("", "Receive : " .. tostring(#inv))
 
-            local DataUser = PlayerData:GetData().Data
+        local DataUser = PlayerData:GetData().Data
 
-            while not DataUser.SeenTutorial do
-                SpawnTutorialBrainrot:FireServer()
-                FinishTutorial:FireServer()
+        while not DataUser.SeenTutorial do
+            SpawnTutorialBrainrot:FireServer()
+            FinishTutorial:FireServer()
 
-                task.wait(0.5)
+            task.wait(0.5)
 
-                DataUser = PlayerData:GetData().Data
-            end
+            DataUser = PlayerData:GetData().Data
+        end
 
-            if #inv == 248 then
-                writeData("Completed", "Receive : " .. tostring(#inv))
-                break
-            end
+        if #inv == 248 then
+            writeData("Completed", "Receive : " .. tostring(#inv))
+            break
+        end
 
-            if tick() - lastReceiveTime >= TIMEDELAY then
-                writeData("ChangeServer", "Receive : " .. tostring(#inv))
-                break
-            end
-        end)
-
-        if not success then
-            writeData("RunAgain", err)
+        if tick() - lastReceiveTime >= TIMEDELAY then
+            writeData("ChangeServer", "Receive : " .. tostring(#inv))
             break
         end
 
