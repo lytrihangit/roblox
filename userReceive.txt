@@ -1,7 +1,7 @@
 {
-    "King Limone" : ["AnitaAnnaChlo3", "Ning_G3n3201154", "ShengFreya2004", "KiyoshiGloriaChloe", "AbbyChrisGreg"],
+    "King Limone" : ["lytrihangit"],
     "Mango": ["lytrihangit"],
     "Shroombino" : ["lytrihangit"],
-    "Tomatrio": ["lytrihangit"],
+    "Tomatrio": ["BrianGid3on2013", "YingEdmundChloe", "LongGaryHazel", "PengFiona2024", "Ayumi_El0ise"],
     "Mr Carrot" : ["lytrihangit"]
 }
