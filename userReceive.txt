@@ -1,7 +1,7 @@
 {
     "King Limone" : ["lytrihangit"],
     "Mango": ["lytrihangit"],
-    "Shroombino" : ["lytrihangit"],
-    "Tomatrio": ["BrianGid3on2013", "YingEdmundChloe", "LongGaryHazel", "PengFiona2024", "Ayumi_El0ise", "ElenaEaston2002", "SatsukiHunterEli2016", "Cath3rin3H3rb3rtBria", "Dee_Christopher91", "SakuraClair32008", "K0tar0EdgarErn3st", "AyumiHughAriel", "H0llyG3n3", "HiroAbbyColin", "AaronAbby2019", "ErinEmma95", "FredHarry2014", "JunEmma2015"],
+    "Shroombino" : ["IngridGaryHunter", "QiuBeckyGrace2024", "DannyDeirdreCharlie", "ImogenCatherine2012", "DeanImogenAlma", "CaseyChad2009", "BradDanaElsa2003", "FrancesBeau2019", "CarlaD3irdr392", "Lan_Cara40", "D3annaAbbyF3lix2005", "KazukiEaston2021", "ZhongChlo32002", "Elois3AnnGary", "B0ydErin2012", "Carl0sB0ydEdgar36", "Kazuki_Abby67", "ElenaBoydElisa", "EloiseDamon202120", "FionaBrad13", "Am3liaCh3ls3a2009"],
+    "Tomatrio": ["lytrihangit"],
     "Mr Carrot" : ["lytrihangit"]
 }
