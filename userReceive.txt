@@ -1,6 +1,6 @@
 {
-    "King Limone" : ["lytrihangit"],
-    "Mango": ["JING_Aiden2003", "GregAaronErnest84", "Kiy0shi_Carl0s2009", "HughEl3anor48", "Eric_Ch3ryl2024", "Deirdre_ELLA2002", "Kozu3Charli3Dallas43", "BrettEbba2019", "HazelBob2011", "YunGraceDeirdre2010", "KiyoshiEleanor2018", "ErinDanny2021", "Ning_ISAB3L", "SotaChelsea2018", "HughHugoEdgar2020", "HeidiBradChelsea", "Chun_Diego82", "B3ttyGail", "MasakoFreya36", "Yan_Bonni3"],
+    "King Limone" : ["BradCara2016", "MariBrent2021", "GretaElijah2008", "NoboruChase2010", "BorisEleanor84"],
+    "Mango": ["lytrihangit"],
     "Shroombino" : ["lytrihangit"],
     "Tomatrio": ["lytrihangit"],
     "Mr Carrot" : ["lytrihangit"]
