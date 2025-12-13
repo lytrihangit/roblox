@@ -1,0 +1,49 @@
+task.wait(15)
+
+local HttpService = game:GetService("HttpService")
+local v1 = game:GetService("ReplicatedStorage")
+local v5 = v1:WaitForChild("Shared")
+local v6 = v5:WaitForChild("Packages")
+local v7 = require(v6.Knit)
+local v14 = v7.GetController("PlayerController")
+local v_u_18 = v14.Replica.Data
+
+local listRaces = {"Angel", "Demon"}
+local fileName = game:GetService("Players").LocalPlayer.Name .. ".json"
+
+local function writeData(request, text)
+	writefile(fileName, HttpService:JSONEncode({ Request = request, Text = text }))
+end
+
+local function isInList(item, list)
+    for _, v in pairs(list) do
+        if v == item then
+            return true
+        end
+    end
+    return false
+end
+
+task.spawn(function()
+    while true do
+        game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("CodeService"):WaitForChild("RF"):WaitForChild("RedeemCode"):InvokeServer("FORG!")
+
+        task.wait(1)
+        
+        if isInList(v_u_18.Race, listRaces) then
+            writeData('Completed', v_u_18.Race)
+            break
+        end
+
+        if v_u_18.Spins == 0 then
+            writeData('Completed', 'OutSpins')
+            break
+        end
+
+        writeData('', 'Rolling')
+
+        game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("RaceService"):WaitForChild("RF"):WaitForChild("Reroll"):InvokeServer()
+
+        task.wait(0.5)
+    end
+end)
